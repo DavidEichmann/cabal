@@ -1,8 +1,34 @@
 Cabal file format changelog
 ===========================
 
-Changes in 2.4
---------------
+==================================================
+ Package Description Format Specification History
+==================================================
+
+:ref:`pkg-desc` need to specify the version of the
+specification they need to be interpreted in via the
+:pkg-field:`cabal-version` declaration. The following list describes
+changes that occurred in each version of the cabal specification
+relative to the respective preceding *published* version.
+
+.. note::
+
+    The sequence of specification version numbers is *not*
+    contiguous because it's synchronised with the version of the
+    ``Cabal`` library. As a consequence, only *even* versions are
+    considered proper published versions of the specification as *odd*
+    versions of the ``Cabal`` library denote unreleased development
+    branches which have no stability guarantee.
+
+``cabal-version: 2.5``
+----------------------
+
+* Added the `extra-dynamic-library-flavours` field to specify non-trivial
+  variants of dynamic flavours. It is `extra-library-flavours` but for
+  shared libraries. Mainly useful for GHC's RTS library.
+
+``cabal-version: 2.4``
+----------------------
 
 * Wildcard matching has been expanded. All previous wildcard
   expressions are still valid; some will match strictly more files
