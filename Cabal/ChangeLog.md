@@ -1,4 +1,13 @@
-# 2.4.0.0 (current development version)
+# 2.6.0.0 (current development version)
+  * Add `extra-dynamic-library-flavours`, to specify extra dynamic library
+    flavours to build and install from a .cabal file.
+
+----
+
+# 2.4.0.0 [Mikhail Glushenkov](mailto:mikhail.glushenkov@gmail.com) September 2018
+  * Due to [#5119](https://github.com/haskell/cabal/issues/5119), the
+    `cabal check` warning for bounds on internal libraries has been
+    disabled.
   * `Distribution.Simple.Haddock` now checks to ensure that it
     does not erroneously call Haddock with no target modules.
     ([#5232](https://github.com/haskell/cabal/issues/5232),
