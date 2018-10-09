@@ -1773,12 +1773,14 @@ installLib verbosity lbi targetDir dynlibTargetDir _builtDir _pkg lib clbi = do
                 ]
     whenProf    $ installOrdinary builtDir targetDir       profileLibName
     whenGHCi    $ installOrdinary builtDir targetDir       ghciLibName
-    whenShared  $
+    whenShared  $ installShared   builtDir dynlibTargetDir ((mkSharedLibName (hostPlatform lbi) compiler_id) uid)
+    {-
       sequence_ [ installShared builtDir dynlibTargetDir
                     (mkGenericSharedLibName platform compiler_id (l ++ f))
                 | l <- getHSLibraryName uid : extraBundledLibs (libBuildInfo lib)
                 , f <- "":extraDynLibFlavours (libBuildInfo lib)
                 ]
+                -}
 
   where
     builtDir = componentBuildDir lbi clbi
