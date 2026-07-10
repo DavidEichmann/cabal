@@ -128,7 +128,7 @@ import Distribution.Version
 import Language.Haskell.Extension
 import System.FilePath
   ( isRelative
-  , takeDirectory
+  , takeDirectory, (-<.>)
   )
 import qualified System.Info
 #ifndef mingw32_HOST_OS
@@ -1001,24 +1001,37 @@ installLib verbosity lbi targetDir dynlibTargetDir _builtDir pkg lib clbi = do
             -- The behavior for "extra-bundled-libraries" changed in version 2.5.0.
             -- See ghc issue #15837 and Cabal PR #5855.
             | specVersion pkg < CabalSpecV3_0 -> do
-                sequence_
-                  [ installShared
-                    builtDir
-                    dynlibTargetDir
-                    (mkGenericSharedLibName platform compiler_id (l ++ f))
+                sequence_ $ concat
+                  [ let libName = mkGenericSharedLibName platform compiler_id (l ++ f)
+                    in
+                    [ installShared
+                        builtDir
+                        dynlibTargetDir
+                        libName
+                    , installOrdinary
+                        builtDir
+                        dynlibTargetDir
+                        (libName <.> "a") -- TODO this is just for windows
+                    ]
                   | l <- getHSLibraryName uid : extraBundledLibs (libBuildInfo lib)
                   , f <- "" : extraDynLibFlavours (libBuildInfo lib)
                   ]
             | otherwise -> do
-                sequence_
-                  [ installShared
-                    builtDir
-                    dynlibTargetDir
-                    ( mkGenericSharedLibName
-                        platform
-                        compiler_id
-                        (getHSLibraryName uid ++ f)
-                    )
+                sequence_ $ concat
+                  [ let libName = mkGenericSharedLibName
+                            platform
+                            compiler_id
+                            (getHSLibraryName uid ++ f)
+                    in
+                    [ installShared
+                        builtDir
+                        dynlibTargetDir
+                        libName
+                    , installOrdinary
+                        builtDir
+                        dynlibTargetDir
+                        (libName <.> "a") -- TODO this is just for windows
+                    ]
                   | f <- "" : extraDynLibFlavours (libBuildInfo lib)
                   ]
                 sequence_
